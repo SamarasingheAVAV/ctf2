@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Search results for "{{ q }}"</h2>
+<table class="table">
+	<tr><th>Image</th><th>Name</th><th>Description</th><th>Stock</th></tr>
+	{% for r in results %}
+	<tr>
+		<td><img src="{{ url_for('serve_image', filename=r['image']) }}" alt="{{ r['name'] }}" style="width:80px;height:80px;object-fit:cover;" /></td>
+		<td><a href="{{ url_for('product_detail', product_id=r['id']) }}">{{ r['name'] }}</a></td>
+		<td>{{ r['description'] }}</td>
+		<td>{{ r['stock'] }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% if trigger_flag_sqli %}
+<script>
+fetch('/flag/sqli').then(r=>r.text()).then(t=>{ alert(t); });
+</script>
+{% endif %}
+{% if trigger_flag_xss %}
+<script>
+alert('XSS in search: THM{reflected_xss_comment_pop_executed}');
+</script>
+{% endif %}
+<p>Hint: This search is SQL injectable.</p>
+{% endblock %}

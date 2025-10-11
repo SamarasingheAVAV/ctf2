@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ product['name'] }}</h2>
+<img src="{{ url_for('serve_image', filename=product['image']) }}" alt="{{ product['name'] }}" style="width:100%;max-width:600px;height:360px;object-fit:cover;" />
+<p>{{ product['description'] }}</p>
+<p class="badge">Check stock: {{ product['stock'] }}</p>
+{% if message %}<div class="alert">{{ message }}</div>{% endif %}
+
+<h3>Comments</h3>
+<form method="post">
+	<textarea name="content" placeholder="Leave a comment"></textarea>
+	<div><button class="button" type="submit">Submit</button></div>
+</form>
+<div id="xss-flag" class="alert" style="display:none;"></div>
+<ul>
+	{% for c in comments %}
+	<li>
+		<strong>{{ c['username'] }}</strong> says:
+		<span>{{ c['content']|safe }}</span>
+	</li>
+	{% endfor %}
+</ul>
+<p>Hint: Stored XSS will trigger a hidden flag.</p>
+{% if xss %}
+<script>
+Promise.all([
+	fetch('/flag/xss').then(r=>r.text())
+]).then(([flag])=>{
+	alert('XSS: ' + flag);
+	const flagBox = document.getElementById('xss-flag');
+	flagBox.textContent = flag;
+	flagBox.style.display = 'block';
+});
+</script>
+{% endif %}
+{% endblock %}

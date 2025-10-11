@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Upload your design idea</h2>
+{% if message %}<div class="alert">{{ message }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data">
+	<input type="file" name="file" />
+	<button class="button" type="submit">Upload</button>
+</form>
+{% if filename %}
+	<p>Uploaded: <a href="{{ url_for('serve_upload', filename=filename) }}">{{ filename }}</a></p>
+	{% if flag %}
+		<p><a class="button" href="{{ url_for('flag_upload') }}">Get upload flag</a></p>
+	{% endif %}
+{% endif %}
+<p>Note: No checks on file type or name (vulnerable).</p>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Profile #{{ user['id'] }}</h2>
+<p><strong>Username:</strong> {{ user['username'] }}</p>
+<p><strong>Bio:</strong> {{ user['bio'] }}</p>
+{% if show_idor_flag %}
+<div class="alert">THM{insecure_direct_object_reference_profile}</div>
+{% endif %}
+{% endblock %}
